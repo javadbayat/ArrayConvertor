@@ -1,0 +1,81 @@
+﻿<job id="Encryption">
+	<script language="VBScript">
+        Function Ask(m)
+            Ask = InputBox(m, "Encryption")
+        End Function
+	</script>
+
+	<script language="JScript">
+	    with (WSH) {
+	        var wshShell = CreateObject("WScript.Shell");
+	        var fso = CreateObject("Scripting.FileSystemObject");
+	        var ConvertArray = LoadStation("ArrayConvertor.dll");
+
+	        var inputFile, outputFile;
+	        for (var e = new Enumerator(Arguments.Unnamed) ; !e.atEnd() ; e.moveNext()) {
+	            if (!inputFile)
+	                inputFile = e.item();
+	            else if (!outputFile)
+	                outputFile = e.item();
+	        }
+
+	        if (!inputFile)
+	            throw new Error("No file name specified");
+
+	        if (!outputFile)
+	            outputFile = inputFile;
+
+	        var stream = CreateObject("ADODB.Stream");
+	        stream.Open();
+	        stream.Type = 1;
+	        stream.LoadFromFile(inputFile);
+	        var data = ConvertArray(stream.Read(), []);
+	        stream.Close();
+
+	        var key = Ask("Enter the encryption key:");
+	        if (!key)
+	            Quit(1);
+
+	        var j = 0;
+	        for (var i = 0; i < data.length; i++) {
+	            var c = key.charCodeAt(j);
+	            data[i] ^= c;
+	            j = (j + 1) % key.length;
+	        }
+
+	        if (fso.FileExists(outputFile))
+	            fso.DeleteFile(outputFile);
+
+	        stream.Open();
+	        stream.Type = 1;
+	        stream.Write(ConvertArray(data, 17));
+	        stream.SaveToFile(outputFile);
+	        stream.Close();
+
+	        Echo("Your file has been successfully encrypted!");
+	    }
+
+	    function LoadStation(moduleName) {
+	        var fileName = WSH.ScriptFullName;
+	        // var fileName = location.pathname;
+
+	        var cmd = "rundll32 " + moduleName + ",StationInject";
+	        var env = wshShell.Environment("Process");
+	        env("ActiveStation") = "?";
+	        var initialDir = wshShell.CurrentDirectory;
+	        wshShell.CurrentDirectory = fso.GetParentFolderName(fileName);
+	        if (!fso.FileExists(moduleName))
+	            throw new Error('The module "' + moduleName + '" could not be found');
+
+	        var exitCode = wshShell.Run(cmd, 0, true);
+	        wshShell.CurrentDirectory = initialDir;
+	        if (exitCode)
+	            throw new Error("StationInject has failed with error code " + exitCode);
+
+	        var station = GetObject(env("ActiveStation"));
+	        env.Remove("ActiveStation");
+
+	        return station;
+	    }
+	</script>
+</job>
