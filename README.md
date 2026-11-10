@@ -94,7 +94,7 @@ jsArray = ConvertArray( safearray, [] );
 
 #### Parameters
 + `safearray`: Set to the *safearray* that is to be converted. This *safearray* can be of any base type.
-+ The second parameter must be always set to an empty JScript array (`[]`). The reason for supplying this parameter is that the implementation of the Array Convertor module will extract the elements of the source *safearray* and then call the `push` method on this empty JScript array repeatedly to add each of the elements extracted. The Array Convertor module itself has no way to construct an empty JScript array, so it needs to take one from the caller, fill it with the elements taken from the source *safearray*, and finally return the same JS array that was passed in.
++ The second parameter must be always set to an empty JScript array (`[]`). The reason for supplying this parameter is that the implementation of the Array Convertor module will extract the elements of the source *safearray* and then call the `push` method on this empty JScript array repeatedly to add each of the elements extracted. The Array Convertor module itself has no way to construct an empty JScript array, so it needs to take one from the caller, fill it with the elements retrieved from the source *safearray*, and finally return the same JS array that was passed in.
 
 #### Return Value
 Returns the JScript array resulting from the conversion.
