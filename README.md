@@ -24,7 +24,7 @@ Then, showing the following message will indicate success:
 Later, re-encrypting the encrypted file with the same key will produce the original file.
 
 ## The Array Convertor module
-Sometimes in your JScript code, you have to convert your arrays into [*safearrays*](https://learn.microsoft.com/en-us/windows/win32/api/oaidl/ns-oaidl-safearray) so you can pass them to certain functions. For example, [the `Write` method](https://learn.microsoft.com/en-us/office/client-developer/access/desktop-database-reference/write-method-ado) of the [`ADODB.Stream` object](https://learn.microsoft.com/en-us/office/client-developer/access/desktop-database-reference/stream-object-ado) accepts only *safearrays* of type `VT_UI1` rather than JScript arrays. So the following code would be an error:
+Sometimes in your JScript code, you have to convert your arrays into [*safearrays*](https://learn.microsoft.com/en-us/windows/win32/api/oaidl/ns-oaidl-safearray) so you can pass them to certain functions. For example, the [`Write` method](https://learn.microsoft.com/en-us/office/client-developer/access/desktop-database-reference/write-method-ado) of the [`ADODB.Stream` object](https://learn.microsoft.com/en-us/office/client-developer/access/desktop-database-reference/stream-object-ado) accepts only *safearrays* of type `VT_UI1` rather than JScript arrays. So the following code would be an error:
 
 ```js
 var data = [ 0xA8, 0x4B, 0xDC, 0x6B ];
